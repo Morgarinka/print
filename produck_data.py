@@ -3,11 +3,11 @@ from telegram.ext import (
     CommandHandler,
     MessageHandler,
     filters,
-    CallbackQueryHandler,ConversationHandler
-    ContextTypes,
+    CallbackQueryHandler,
+    ConversationHandler,
 )
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
-from produck_data import products
+
 
 products = [
     {
@@ -129,6 +129,7 @@ async def start_button(update, context):
             ["Время работы", "Информация о компании"],
             ["Условия доставки", "Контакты"],
             ["Способ оплаты"],
+            ["Сбор данных о пользователе"],
         ],
         resize_keyboard=True,
     )
@@ -154,12 +155,27 @@ async def text_button(update, context):
         bot_message = "Наши контакты: т. +7959123123, наш сайт https://vk.com/guliett_city_sport_lg"
     elif user_text == "Способ оплаты":
         bot_message = 'Оплата производится при полной предоплате на номер карты "123345892489" или по номеру телефона в кнопке "Контакты".'
+    elif user_text == "Сбор данных о пользователе":
+        await update.message.reply_text(
+            "Начнем собирать данные о тебе. Напиши свое имя."
+        )
+        return NAME
     else:
         bot_message = "Такой функции еще нет."
 
     await update.message.reply_text(bot_message)
 
-NAME, PHONE, ADRESS, EMAIL, AGE, GENDER, CITY,  = range(8)
+
+(
+    NAME,
+    PHONE,
+    ADRESS,
+    EMAIL,
+    AGE,
+    GENDER,
+    CITY,
+) = range(7)
+
 
 async def user_data(update, context):
     context.user_data["user_name"] = ""
@@ -167,7 +183,7 @@ async def user_data(update, context):
     context.user_data["user_adress"] = ""
     context.user_data["user_email"] = ""
     context.user_data["user_age"] = ""
-    context.user_data["user_gender"]= ""
+    context.user_data["user_gender"] = ""
     context.user_data["user_city"] = ""
     await update.message.reply_text("Введи свое имя")
     return NAME
@@ -184,31 +200,35 @@ async def phone(update, context):
     await update.message.reply_text("Введи свой адрес")
     return ADRESS
 
+
 async def adress(update, context):
     context.user_data["user_adress"] = update.message.text
     await update.message.reply_text("Введи свою электронную почту")
     return EMAIL
+
 
 async def email(update, context):
     context.user_data["user_email"] = update.message.text
     await update.message.reply_text("Сколько тебе лет?")
     return AGE
 
+
 async def age(update, context):
     context.user_data["user_age"] = update.message.text
     await update.message.reply_text("Какой у тебя пол?")
     return GENDER
+
 
 async def gender(update, context):
     context.user_data["user_gender"] = update.message.text
     await update.message.reply_text("В каком городе ты живешь?")
     return CITY
 
+
 async def city(update, context):
     context.user_data["user_city"] = update.message.text
     await update.message.reply_text(
-        f'Вот собранная информация:{context.user_data["user_name"]} {context.user_data["user_phone"]} {context.user_data["user_adress"]}\n
-          {context.user_data["user_email"]} {context.user_data["user_age"]} {context.user_data["user_gender"]} { context.user_data["user_city"]}'
+        f'Вот собранная информация:{context.user_data["user_name"]} {context.user_data["user_phone"]} {context.user_data["user_adress"]} {context.user_data["user_email"]} {context.user_data["user_age"]} {context.user_data["user_gender"]} { context.user_data["user_city"]}'
     )
     return ConversationHandler.END
 
@@ -219,7 +239,7 @@ async def cancel(update, context):
 
 
 conv_handler = ConversationHandler(
-    entry_points=[CommandHandler("user_data", user_data)],
+    entry_points=[CommandHandler("Сбор данных о пользователе", start_button)],
     states={
         NAME: [MessageHandler(filters.TEXT, name)],
         PHONE: [MessageHandler(filters.TEXT, phone)],
@@ -233,12 +253,8 @@ conv_handler = ConversationHandler(
 )
 
 
-
-
 app = (
-    ApplicationBuilder()
-    .token("8194772213:AAEzbdm1wjIhW5uaR8P9NLb1cc3Gq__5gkU")
-    .build()  # Убедитесь, что вы ввели правильный токен
+    ApplicationBuilder().token("8194772213:AAEzbdm1wjIhW5uaR8P9NLb1cc3Gq__5gkU").build()
 )
 
 app.add_handler(CommandHandler("start", start))
