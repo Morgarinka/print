@@ -59,3 +59,30 @@ async def start(update, context):
         f'Здраствуйте,{update.effective_user.last_name} {update.effective_user.first_name}! Нажмите "Начать" для продолжения:',
         reply_markup=my_kb,
     )
+    await start_button(update, context)
+
+
+async def button(update, context):
+    query = update.callback_query
+    await query.answer()
+
+    if query.data == "start":
+        await query.edit_message_text(
+            text=f"Здравствуйте, {query.from_user.last_name} {query.from_user.first_name}! Вы находитесь в главном меню. Выберите действие:",
+            reply_markup=query.message.reply_markup,
+        )
+    elif query.data == "buy":
+        context.user_data["operation"] = "buy"
+        await query.edit_message_text(
+            text="Вы выбрали 'Купить'.", reply_markup=product_kb()
+        )
+    elif query.data.startswith("prod"):
+        product_id = query.data
+        context.user_data["product_id"] = product_id
+        for product in products:
+            if product["id"] == product_id:
+                name = product["name"]
+                price = product["price"]
+                img = product["caption"]
+                chat_id = update.effective_chat.id
+                
