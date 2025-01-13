@@ -159,7 +159,7 @@ async def text_button(update, context):
 
     await update.message.reply_text(bot_message)
 
-NAME, PHONE, ADRESS, EMAIL, AGE, GENDER, CITY, DESCRIPTION = range(8)
+NAME, PHONE, ADRESS, EMAIL, AGE, GENDER, CITY,  = range(8)
 
 async def user_data(update, context):
     context.user_data["user_name"] = ""
@@ -207,7 +207,8 @@ async def gender(update, context):
 async def city(update, context):
     context.user_data["user_city"] = update.message.text
     await update.message.reply_text(
-        f'Вот собранная информация:{context.user_data["user_name"]} {context.user_data["user_phone"]} {context.user_data["user_adress"]}{context.user_data["user_email"]}{context.user_data["user_age"]}{context.user_data["user_gender"]}{ context.user_data["user_city"]}'
+        f'Вот собранная информация:{context.user_data["user_name"]} {context.user_data["user_phone"]} {context.user_data["user_adress"]}\n
+          {context.user_data["user_email"]} {context.user_data["user_age"]} {context.user_data["user_gender"]} { context.user_data["user_city"]}'
     )
     return ConversationHandler.END
 
