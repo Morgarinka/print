@@ -1,3 +1,19 @@
+from telegram.ext import (
+    ApplicationBuilder,
+    CommandHandler,
+    MessageHandler,
+    filters,
+    CallbackQueryHandler,
+    ContextTypes,
+)
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
+from produck_data import products
+
+
+
+
+
+
 products = [
     {
         "name": "Лосины",
@@ -21,3 +37,14 @@ products = [
         "img": "t_1.jpg",
     },
 ]
+
+def product_kb():
+    buttons=[]
+    for product in products:
+        button_name=(f"{product['name']} {product['decripton']} price:{product['price']}")
+        button=InlineKeyboardButton(button_name,callback_data=product["id"])
+        button.append([button])
+    my_kb=InlineKeyboardMarkup(buttons)
+    return my_kb
+
+
