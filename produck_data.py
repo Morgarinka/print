@@ -10,10 +10,6 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMa
 from produck_data import products
 
 
-
-
-
-
 products = [
     {
         "name": "Лосины",
@@ -38,13 +34,22 @@ products = [
     },
 ]
 
+
 def product_kb():
-    buttons=[]
+    buttons = []
     for product in products:
-        button_name=(f"{product['name']} {product['decripton']} price:{product['price']}")
-        button=InlineKeyboardButton(button_name,callback_data=product["id"])
+        button_name = (
+            f"{product['name']} {product['decripton']} price:{product['price']}"
+        )
+        button = InlineKeyboardButton(button_name, callback_data=product["id"])
         button.append([button])
-    my_kb=InlineKeyboardMarkup(buttons)
+    my_kb = InlineKeyboardMarkup(buttons)
     return my_kb
 
 
+async def start(update, context):
+    context.user_data["operation"] = None
+    my_kb = InlineKeyboardMarkup(
+        [InlineKeyboardButton("Начать", callback_data="start")],
+        [InlineKeyboardButton("Купить", callback_data="buy")],
+    )
