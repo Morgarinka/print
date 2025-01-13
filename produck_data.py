@@ -50,6 +50,12 @@ def product_kb():
 async def start(update, context):
     context.user_data["operation"] = None
     my_kb = InlineKeyboardMarkup(
-        [InlineKeyboardButton("Начать", callback_data="start")],
-        [InlineKeyboardButton("Купить", callback_data="buy")],
+        [
+            [InlineKeyboardButton("Начать", callback_data="start")],
+            [InlineKeyboardButton("Купить", callback_data="buy")],
+        ],
+    )
+    await update.message.reply_text(
+        f'Здраствуйте,{update.effective_user.last_name} {update.effective_user.first_name}! Нажмите "Начать" для продолжения:',
+        reply_markup=my_kb,
     )
