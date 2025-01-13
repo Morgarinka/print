@@ -85,4 +85,11 @@ async def button(update, context):
                 price = product["price"]
                 img = product["caption"]
                 chat_id = update.effective_chat.id
-                
+                img_path = r"C:\Users\1\Desktop\Progammirov\print\Img\\" + img
+                with open(img_path, "rb") as photo:
+                    await context.bot.send_photo(
+                        chat_id=chat_id, photo=photo, caption=caption
+                    )
+                context.bot.send_message(
+                    f"Вы выбрали {name} за {price} руб. Укажите количество:",
+                )
