@@ -239,7 +239,9 @@ async def cancel(update, context):
 
 
 conv_handler = ConversationHandler(
-    entry_points=[MessageHandler(filters.Regex('^Сбор данных о пользователе$'), text_button)],
+    entry_points=[
+        MessageHandler(filters.Regex("^Сбор данных о пользователе$"), text_button)
+    ],
     states={
         NAME: [MessageHandler(filters.TEXT, name)],
         PHONE: [MessageHandler(filters.TEXT, phone)],
@@ -256,10 +258,9 @@ conv_handler = ConversationHandler(
 app = (
     ApplicationBuilder().token("8194772213:AAEzbdm1wjIhW5uaR8P9NLb1cc3Gq__5gkU").build()
 )
-
+app.add_handler(conv_handler)
 app.add_handler(CommandHandler("start", start))
 app.add_handler(MessageHandler(filters.Regex(r"^\d+$"), receive_quantity))
-app.add_handler(conv_handler)
 app.add_handler(CallbackQueryHandler(button))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text_button))
 app.add_handler(CallbackQueryHandler(button))
