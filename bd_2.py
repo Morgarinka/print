@@ -75,8 +75,39 @@ def add_product(name: str, description: str, price: float, stock: int, category_
     session.commit()
   
     print(f"Добавлен продукт: {name}, категория ID: {category_id}")
+#Фильтр по всем категориям
+def get_all_users():
+    with SessionLocal()as session:
+        users=session.query(User).all()
+        return users
+
+def get_all_categories():
+    with SessionLocal()as session:
+        categories=session.query(Category).all()
+        return categories
+
+def get_all_products():
+    with SessionLocal()as session:
+        products=session.query(Product).all()
+        return products
+#Фильтр по имени
+def get_user_by_name(name:str):
+    with SessionLocal()as session:
+        user=session.query(User).filter(User.name==name).all()
+        return user
+    
+def get_category_by_name(name:str):
+    with SessionLocal()as session:
+        category=session.query(Category).filter(Category.name==name).all()
+        return category
+
+def get_product_by_name(name:str):
+    with SessionLocal()as session:
+        product=session.query(Product).filter(Product.name==name).all()
+        return product
+
 
 if __name__ == "__main__":
-    add_user('Alice', '+723-456-7890')
+    add_user('Bob', '+723-456-7890')
     add_category('Electron')
-    add_product('Smartphone', 'Latest model smartphone', 699.99, 50, 1)
+    add_product('Smartphone', 'new model', 699.99, 50, 1)
