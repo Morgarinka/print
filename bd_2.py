@@ -62,52 +62,108 @@ def add_category(name: str):
     print(f"Добавлена категоря:{name}")
 
 
-def add_product(name: str, description: str, price: float, stock: int, category_id: int):
+def add_product(
+    name: str, description: str, price: float, stock: int, category_id: int
+):
     with SessionLocal() as session:
         new_product = Product(
-        name=name,
-        description=description,
-        price=price,
-        stock=stock,
-        category_id=category_id,
-    )
+            name=name,
+            description=description,
+            price=price,
+            stock=stock,
+            category_id=category_id,
+        )
     session.add(new_product)
     session.commit()
-  
+
     print(f"Добавлен продукт: {name}, категория ID: {category_id}")
-#Фильтр по всем категориям
+
+
+# Фильтр по всем категориям
 def get_all_users():
-    with SessionLocal()as session:
-        users=session.query(User).all()
+    with SessionLocal() as session:
+        users = session.query(User).all()
         return users
 
+
 def get_all_categories():
-    with SessionLocal()as session:
-        categories=session.query(Category).all()
+    with SessionLocal() as session:
+        categories = session.query(Category).all()
         return categories
 
+
 def get_all_products():
-    with SessionLocal()as session:
-        products=session.query(Product).all()
+    with SessionLocal() as session:
+        products = session.query(Product).all()
         return products
-#Фильтр по имени
-def get_user_by_name(name:str):
-    with SessionLocal()as session:
-        user=session.query(User).filter(User.name==name).all()
+
+
+# Фильтр по имени
+def get_user_by_name(name: str):
+    with SessionLocal() as session:
+        user = session.query(User).filter(User.name == name).all()
         return user
-    
-def get_category_by_name(name:str):
-    with SessionLocal()as session:
-        category=session.query(Category).filter(Category.name==name).all()
+
+
+def get_category_by_name(name: str):
+    with SessionLocal() as session:
+        category = session.query(Category).filter(Category.name == name).all()
         return category
 
-def get_product_by_name(name:str):
-    with SessionLocal()as session:
-        product=session.query(Product).filter(Product.name==name).all()
+
+def get_product_by_name(name: str):
+    with SessionLocal() as session:
+        product = session.query(Product).filter(Product.name == name).all()
         return product
 
 
 if __name__ == "__main__":
-    add_user('Bob', '+723-456-7890')
-    add_category('Electron')
-    add_product('Smartphone', 'new model', 699.99, 50, 1)
+    add_user("Bob", "+723-456-7890")
+    add_user("Alex", "+855-465-5457")
+    add_category("Electron")
+    add_category("Textile")
+    add_product("Smartphone", "new model", 699.99, 50, 1)
+    add_product("Knitwear", "white", 123, 22, 2)
+ 
+ # Получение всех пользователей
+users = get_all_users()
+print("Все пользователи:")
+for user in users:
+    print(f"ID: {user.id}, Имя: {user.name}, Телефон: {user.phone}")
+
+# Получение всех категорий
+categories = get_all_categories()
+print("\nВсе категории:")
+for category in categories:
+    print(f"ID: {category.id}, Имя: {category.name}")
+
+# Получение всех продуктов
+products = get_all_products()
+print("\nВсе продукты:")
+for product in products:
+    print(
+        f"ID: {product.id}, Имя: {product.name}, Цена: {product.price}, Запас: {product.stock}, Категория ID: {product.category_id}"
+    )
+
+
+# Получение пользователя по имени
+found_users = get_user_by_name("Bob")
+print("\nНайденные пользователи с именем 'Bob':")
+for user in found_users:
+    print(f"ID: {user.id}, Имя: {user.name}, Телефон: {user.phone}")
+
+
+# Получение категорий по имени
+found_categories = get_category_by_name("Electron")
+print("\nНайденные категории с именем 'Electron':")
+for category in found_categories:
+    print(f"ID: {category.id}, Имя: {category.name}")
+
+
+# Получение продуктов по имени
+found_products = get_product_by_name("Smartphone")
+print("\nНайденные продукты с именем 'Smartphone':")
+for product in found_products:
+    print(
+        f"ID: {product.id}, Имя: {product.name}, Цена: {product.price}, Запас: {product.stock}, Категория ID: {product.category_id}"
+    )
