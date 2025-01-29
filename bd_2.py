@@ -124,8 +124,8 @@ if __name__ == "__main__":
     add_category("Textile")
     add_product("Smartphone", "new model", 699.99, 50, 1)
     add_product("Knitwear", "white", 123, 22, 2)
- 
- # Получение всех пользователей
+
+# Получение всех пользователей
 users = get_all_users()
 print("Все пользователи:")
 for user in users:

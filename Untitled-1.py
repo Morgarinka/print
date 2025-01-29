@@ -20,19 +20,19 @@ class Order(Base):
     __tablename__ = "ordes"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("user_id", nullabe=False))
+    user_id = Column(Integer, ForeignKey("user.id", nullabe=False))
     status = Column(String, default="pending")
 
     user = relationship("User", back_populates="orders")
     items = relationship("Orderitem", back_populates="order")
 
 
-class Orderitem(Base):
+class OrderItem(Base):
     __tablename__ = "order_items"
 
     id = Column(Integer, primary_key=True)
-    order_id = Column(Integer, ForeignKey("orders_id"), nullable=False)
-    product_id = Column(Integer, ForeignKey("products_id"), nullable=False)
+    order_id = Column(Integer, ForeignKey("orders.id"), nullable=False)
+    product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
     quantity = Column(Integer, default=1)
     price = Column(REAL, nullable=False)
 

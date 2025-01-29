@@ -4,39 +4,12 @@ from telegram.ext import (
     MessageHandler,
     filters,
     CallbackQueryHandler,
+    ContextTypes,
     ConversationHandler,
 )
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
-import keyboards 
-import data_collection
+from products_1 import products
 
-
-products = [
-    {
-        "name": "Лосины",
-        "decripton": "Черные",
-        "price": "4500",
-        "id": "prod_1",
-        "img": "l_1.jpg",
-        "caption": "Лосины Черные",
-    },
-    {
-        "name": "Топы",
-        "decripton": "Белые",
-        "price": "1200",
-        "id": "prod_2",
-        "img": "r_1.jpg",
-        "caption": "Топы Белые",
-    },
-    {
-        "name": "Рашгарды",
-        "decripton": "Красные",
-        "price": "3000",
-        "id": "prod_3",
-        "img": "t_1.jpg",
-        "caption": "Рашгарды Красные",
-    },
-]
 
 def product_kb():
     buttons = []
@@ -120,17 +93,13 @@ async def receive_quantity(update, context):
         await update.message.reply_text("Пожалуйста, введите корректное количество.")
 
 
-
-
-
-
 async def start_button(update, context):
     my_kb_2 = ReplyKeyboardMarkup(
         [
             ["Время работы", "Информация о компании"],
             ["Условия доставки", "Контакты"],
             ["Способ оплаты"],
-            ["Сбор данных о пользователе"],
+            ["Сбор данных от пользователя"],
         ],
         resize_keyboard=True,
     )
@@ -254,20 +223,3 @@ conv_handler = ConversationHandler(
     },
     fallbacks=[CommandHandler("cancel", cancel)],
 )
-
-
-app = (
-    ApplicationBuilder().token("8194772213:AAEzbdm1wjIhW5uaR8P9NLb1cc3Gq__5gkU").build()
-)
-app.add_handler(conv_handler)
-app.add_handler(CommandHandler("start", start))
-app.add_handler(MessageHandler(filters.Regex(r"^\d+$"), receive_quantity))
-app.add_handler(CallbackQueryHandler(button))
-app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text_button))
-
-
-
-
-# Запуск бота
-print("Бот запущен!")
-app.run_polling()
