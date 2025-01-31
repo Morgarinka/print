@@ -10,19 +10,8 @@ from telegram.ext import (
 from telegram.ext import Updater, filters, CallbackContext
 from data_collection import conv_handler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
-from products_1 import products
-from data_collection import (
-    user_data,
-    name,
-    phone,
-    adress,
-    email,
-    age,
-    gender,
-    city,
-    cancel,
-  
-)
+
+
 
 from keyboards import (
     product_kb,
@@ -52,22 +41,6 @@ app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text_button))
 app.add_handler(CallbackQueryHandler(button))
 
 
-products_1 = products
-keyboards = product_kb()
-keyboards = start_button
-keyboards = start
-keyboards = receive_quantity
-keyboards = text_button
-
-data_cllection = user_data
-data_cllection = name
-data_cllection = phone
-data_cllection = adress
-data_cllection = email
-data_cllection = age
-data_cllection = gender
-data_cllection = city
-data_cllection = cancel
 
 # Запуск бота
 print("Бот запущен!")

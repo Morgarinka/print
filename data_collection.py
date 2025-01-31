@@ -82,7 +82,7 @@ async def cancel(update, context):
 
 conv_handler = ConversationHandler(
     entry_points=[
-        MessageHandler(filters.Regex("^Сбор данных о пользователе$"), text_button)
+        MessageHandler(filters.Text("Сбор данных о пользователе"), user_data)
     ],
     states={
         NAME: [MessageHandler(filters.TEXT, name)],
