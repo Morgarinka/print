@@ -2,6 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Text, REAL, Forei
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.orm import Session, relationship
 
+
 Base = declarative_base()
 engine = create_engine("sqlite:///test.db")
 SessionLocal = sessionmaker(bind=engine)
