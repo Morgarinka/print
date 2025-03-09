@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление пользователями</title>
+</head>
+<body>
+    <h1>Управление пользователями</h1>
+    <form method="POST">
+        <label for="username">Имя пользователя</label><br>
+        <input type="text"name="username" productes="Введите Имя пользователя" required><br><br>
+
+        <button type="submit">Добавить пользователя </button>
+    </form>
+    
+    <h2>Список пользователей</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Имя пользователя</th>
+        </tr>
+        {%for user in users%}
+        <tr>
+            <td>{{user.id}}</td>
+            <td>{{user.username}}</td>
+        </tr>
+        {%endfor%}
+    </table>
+    <br>
+    <a href="{{url_for('index')}}">Вернуться на главную</a>
+</body>
+</html>

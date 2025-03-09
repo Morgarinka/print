@@ -1,92 +1,74 @@
 import random
 import csv
-from flask import Flask, render_template
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Float
+from flask import Flask, render_template, request, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
 
-engine = create_engine("sqlite:///products.db")
-Base = declarative_base()
-Session = sessionmaker(bind=engine)
+app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
 
 
-class Product(Base):
+db = SQLAlchemy(app)
+
+
+class Product(db.Model):
     __tablename__ = "products"
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    description = Column(String)
-    price = Column(Float)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    description = db.Column(db.String, nullable=True)
+    price = db.Column(db.Float, nullable=False)
 
 
-Base.metadata.create_all(engine)
-app = Flask(__name__)
+class User(db.Model):
+    __tablename__ = "users"
 
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.Sting, unique=True, nullable=False)
+    password = db.Column(db.String, nullable=False)
 
-# Добавляем товар
-def add_product(name, description, price):
-    session = Session()
-    new_product = Product(name=name, description=description, price=price)
-    session.add(new_product)
-    session.commit()
-    session.close()
-
-
-# Функция получения товара
-def get_all_probucts():
-    session = Session()
-    products = session.query(Product).all()
-    session.close()
-    return products
-
-
-# Генерация случайного товара
-def generate_random_products(num_products):
-    for _ in range(num_products):
-        name = f"Товар {random.randint(1, 1000)}"
-        description = f"Описание {name}"
-        price = round(random.uniform(1.0, 100.0), 2)
-        add_product(name, description, price)
-
-# запись файла csv
-def export_to_csv():
-    products = get_all_probucts()
-    with open("products.csv", mode="w", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file, delimiter=";")
-        writer.writerow(["id", "name", "description", "price"])
-        for product in products:
-            writer.writerow(
-                [product.id, product.name, product.description, product.price]
-            )
-
-
-def generate_html():
-    products = get_all_probucts()
-    with open("products.html", "w", encoding="utf-8") as file:
-        file.write(
-            '<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Товары</title></head><body>'
-        )
-        file.write(
-            '<h1>Список товаров</h1><table border="1"><tr><th>ID</th><th>Название</th><th>Описание</th><th>Цена</th></tr>'
-        )
-        for product in products:
-            file.write(
-                f"<tr><td>{product.id}</td><td>{product.name}</td><td>{product.description}</td><td>{product.price}</td></tr>"
-            )
-        file.write("</table></body></html>")
-
-
-@app.route("/")
+#Главная
+@app.route("/", methods=["GET"])
 def index():
-    products = get_all_probucts()
-    return render_template("products.html", products=products)
+    products = Product.query.all()
+    return render_template("index.html", products=products)
+
+#Страница добавление товара
+@app.route("/admin/product", methods=["GET", "POST"])
+def admin_product():
+    if request.method == "POST":
+        name = request.form.get("name")
+        description = request.form.get("pdescription")
+        price = request.form.get("price")
+
+        if name and price:
+            new_product = Product(
+                name=name, description=description, price=float(price)
+            )
+            db.session.add(new_product)
+            db.session.commit()
+        return redirect(url_for("index"))
+
+    return render_template("admin_product.html")
+
+#Страница управления пользователями
+@app.route("admin/users", methods=["GET", "POST"])
+def admin_users():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        if username and password:
+            new_user = User(username=username, password=password)
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect(url_for("admin_users"))
+
+    users = User.query.all()
+    return render_template("admin_users.html", users=users)
 
 
 if __name__ == "__main__":
-    generate_random_products(100)
-    export_to_csv()
-    generate_html()
+    with app.app_context():
+        db.create_all()
 
-
-app.run(debug=True)
+    app.run(debug=True)

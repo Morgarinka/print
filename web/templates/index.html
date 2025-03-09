@@ -4,100 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Магазин</title>
     <link rel="stylesheet" , href="{{ url_for('static',filename='style.css')}}">
 </head>
 
 <body>
-    <div>
-        <h1>Спасибо за покупку в нашем магазине! </h1>
-        <p style="font-size:20px">Здравствуйте, Анна!</p>
-        <p style="font-size:20px">Ваш заказ был успешно оформлен и принят к обработке. Ниже представлены все позиции
-            вашего заказа:</p>
-        <h2>Детали заказа №12345</h2>
-    </div>
+    <header>
+    <h1>Добро пожаловать в магазин</h1>
 
-    <table border="1" style="border-collapse: collapse; width: 50%;">
-        <thead>
-            <tr>
-                <th>Наименование товара</th>
-                <th>Количество</th>
-                <th>Цена за единицу</th>
-                <th>Итого</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Смартфон XYZ Pro</td>
-                <td>1</td>
-                <td>25 000 Р</td>
-                <td style="color: red;"> 25 000 Р </td>
-            </tr>
-            <tr>
-                <td>Беспроводные наушники АВС</td>
-                <td>2</td>
-                <td>5 500 Р</td>
-                <td style="color: red;">11 000 Р</td>
-            </tr>
-            <tr>
-                <td>Планшет DEF 10</td>
-                <td>1</td>
-                <td>18 500 Р</td>
-                <td style="color: red;">18 500 Р</td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3"><strong>Общая сумма:</strong></td>
-                <td style="color: red;"><strong>54 500 Р</strong></td>
-            </tr>
-        </tfoot>
+    <form method="POST">
+        <input type="text" name="name" productes="Имя пользователя" required>
+        <input type="password" name="password" productes="Пароль" required>
+        <button type="submit">Войти</button>
+    </form>
+</header>
+
+    <h2>Товары</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Цена</th>
+        </tr>
+        {% for product in products}
+        <tr>
+            <td>{{product.id}}</td>
+            <td>{{product.name}}</td>
+            <td>{{product.description}}</td>
+            <td>{{product.price}}</td>
+        </tr>
+        {%endfor%}
     </table>
-    <h3>Адрес доставки:</h3>
-    <p>Москва, ул. Ленина, д. 15, кв. 42</p>
-    <h4>Способы оплаты:</h4>
-    <p>Вы можете оплатить заказ любым удобным способом:</p>
-    <ul>
-        <li>Кредитная карта</li>
-        <li>Оплата при получении</li>
-        <li> Электронные платежи (WebMoney, Яндекс. Деньги и другие)</li>
-
-    </ul>
-    <p> <strong>Информация о доставке:</strong></p>
-    <p>Ваш заказ будет доставлен в течение 3 рабочих дней.</p>
-    <p>Мы отправим вам уведомление, как только заказ будет отправлен, с номером для отслеживания посылки.</p>
-    
-    <div class="contact-indo"
-    <h5>Контакты для связи:</h5>
-    <p>Если у вас возникли вопросы, не стесняйтесь обращаться в нашу службу поддержки:</p>
-    <ul>
-        <li>Телефон:<strong>(495) 123-45-67</strong></li>
-        <li>Электронная почта: <a href="suppon@shug.com">suppon@shug.com</a></li>
-
-    </ul>
-    </div>
-    
-    <p><strong>Ваши бонусы:</strong></p>
-    <P>Как постовнному клиенту, вам начислено 500 бонусных баллов, которые можно истиольжавать при следующей покупке.
-    </P>
-    <p>Мы благодарим вас за выбор нашего магазина! Желаем приятных покупок!</p>
-    <p>С уважением,</p>
-    <p>Команда интернет-магазина <a href=" Shop.com">Shop.com</a></p>
-    <div class="social-media">
-        <p><strong>Наши социальные сети</strong></p>
-        <ul>
-        <li><a href="#">Instagram</a></li>
-        <li><a href="#">Facebook</a></li>
-        <li><a href="#">Twitter</a></li>
-    </div>
-    <div class="banner">
-        <p><strong>Баннер интернет-магазина</strong></p>
-        <!--banner.gif-->
-        <img src="baner.jpg"alt="Баннер интернет-магазина" style="width: 100%; height: auto;">
-    </div>
-
-
-
+    <br>
+    <a href="{{ url_for('admin_product') }}">Добавить новый товар</a>
+    <a href="{{ url_for('admin_users') }}">Управление пользователями</a>
+ 
 </body>
 
 </html>
