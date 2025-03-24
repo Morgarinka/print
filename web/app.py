@@ -3,12 +3,13 @@ import csv
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from admin import admin_bp
-
+from models import db
+from models import product
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
 
 
-db = SQLAlchemy(app)
+#db = SQLAlchemy(app)
 
 
 class Product(db.Model):
@@ -20,25 +21,21 @@ class Product(db.Model):
     price = db.Column(db.Float, nullable=False)
 
 
-class User(db.Model):
-    __tablename__ = "users"
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.Sting, unique=True, nullable=False)
-    password = db.Column(db.String, nullable=False)
 
-#Главная
+# Главная
 @app.route("/", methods=["GET"])
 def index():
     products = Product.query.all()
     return render_template("index.html", products=products)
 
-#Страница добавление товара
+
+# Страница добавление товара
 @app.route("/admin/product", methods=["GET", "POST"])
 def admin_product():
     if request.method == "POST":
         name = request.form.get("name")
-        description = request.form.get("pdescription")
+        description = request.form.get("description")
         price = request.form.get("price")
 
         if name and price:
@@ -51,8 +48,9 @@ def admin_product():
 
     return render_template("admin_product.html")
 
-#Страница управления пользователями
-@app.route("admin/users", methods=["GET", "POST"])
+
+# Страница управления пользователями
+@app.route("/admin/users", methods=["GET", "POST"])
 def admin_users():
     if request.method == "POST":
         username = request.form.get("username")
@@ -65,9 +63,11 @@ def admin_users():
             return redirect(url_for("admin_users"))
 
     users = User.query.all()
+    
     return render_template("admin_users.html", users=users)
 
-app.register_blueprint(admin_bp,url_prefix="admin")
+
+app.register_blueprint(admin_bp, url_prefix="/admin")
 
 if __name__ == "__main__":
     with app.app_context():

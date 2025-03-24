@@ -10,6 +10,16 @@
 
 <body>
     <header>
+        <h2>Случайные продукты</h2>
+        <ul>
+            {% for product in products %}
+                <li>
+                    <h2>{{ product.name }}</h2>
+                    <p>{{ product.description }}</p>
+                    <p>Цена: {{ product.price }} ₽</p>
+                </li>
+            {% endfor %}
+        </ul>
     <h1>Добро пожаловать в магазин</h1>
 
     <form method="POST">
@@ -27,7 +37,7 @@
             <th>Описание</th>
             <th>Цена</th>
         </tr>
-        {% for product in products}
+        {% for product in products%}
         <tr>
             <td>{{product.id}}</td>
             <td>{{product.name}}</td>
