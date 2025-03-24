@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from admin import admin_bp
 from models import db
-from models import product
+from models import Product,Category
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
 
@@ -20,14 +20,31 @@ class Product(db.Model):
     description = db.Column(db.String, nullable=True)
     price = db.Column(db.Float, nullable=False)
 
+@app.route("/add_product", methods=["GET", "POST"])
+def add_product():
+    if request.method == "POST":
+        name = request.form.get("name")
+        description = request.form.get("description")
+        price = request.form.get("price")
+        category_id = request.form.get("category_id")
+
+        new_product = Product(name=name, description=description, price=price, category_id=category_id)
+        db.session.add(new_product)
+        db.session.commit()
+        return redirect(url_for("index"))
+
+    categories = Category.query.all()  # Получаем все категории для выпадающего списка
+    return render_template("add_product.html", categories=categories)
 
 
 
-# Главная
+
 @app.route("/", methods=["GET"])
 def index():
+    # Получаем все продукты
     products = Product.query.all()
-    return render_template("index.html", products=products)
+    random_products = random.sample(products, min(len(products), 10))
+    return render_template("index.html", products=random_products)
 
 
 # Страница добавление товара
@@ -65,6 +82,7 @@ def admin_users():
     users = User.query.all()
     
     return render_template("admin_users.html", users=users)
+
 
 
 app.register_blueprint(admin_bp, url_prefix="/admin")
