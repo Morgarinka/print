@@ -8,10 +8,10 @@ class Product(db.Model):
     description = db.Column(db.String, nullable=True)
     price = db.Column(db.Float, nullable=False)
 
-class Category(db.Model):
-    __tablename__ = 'categories'
+# class Category(db.Model):
+#     __tablename__ = 'categories'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(50), nullable=False)
 
-    products = db.relationship('Product', backref='category', lazy=True)
+#     products = db.relationship('Product', backref='category', lazy=True)

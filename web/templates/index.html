@@ -9,17 +9,7 @@
 </head>
 
 <body>
-    <header>
-        <h2>Случайные продукты</h2>
-        <ul>
-            {% for product in products %}
-                <li>
-                    <h2>{{ product.name }}</h2>
-                    <p>{{ product.description }}</p>
-                    <p>Цена: {{ product.price }} ₽</p>
-                </li>
-            {% endfor %}
-        </ul>
+    
     <h1>Добро пожаловать в магазин</h1>
 
     <form method="POST">
@@ -28,6 +18,16 @@
         <button type="submit">Войти</button>
     </form>
 </header>
+<h2>Случайные продукты</h2>
+    <ul>
+        {% for product in products %}
+            <li>
+                <h2>{{ product.name }}</h2>
+                <p>{{ product.description }}</p>
+                <p>Цена: {{ product.price }} ₽</p>
+            </li>
+        {% endfor %}
+    </ul>
 
     <h2>Товары</h2>
     <table border="1">
@@ -37,7 +37,7 @@
             <th>Описание</th>
             <th>Цена</th>
         </tr>
-        {% for product in products%}
+        {% for product in all_products%}
         <tr>
             <td>{{product.id}}</td>
             <td>{{product.name}}</td>
@@ -47,8 +47,8 @@
         {%endfor%}
     </table>
     <br>
-    <a href="{{ url_for('admin_product') }}">Добавить новый товар</a>
-    <a href="{{ url_for('admin_users') }}">Управление пользователями</a>
+    <a href="{{ url_for('admin.admin_product') }}">Добавить новый товар</a>
+    <a href="{{ url_for('admin.admin_users') }}">Управление пользователями</a>
  
 </body>
 
