@@ -1,11 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Категории</title>
 </head>
+
 <body>
-    
+    <h1>Список категорий</h1>
+    <h2>Категории</h2>
+    <ul>
+        {% for category in categories %}
+        <li><a href="{{ url_for('category_products', category_id=category.id) }}">{{ category.name }}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('add_product') }}">Добавить продукт</a>
 </body>
+
 </html>
+
+<

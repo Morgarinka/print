@@ -4,11 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Продукты категории:</title>
+    <title>Продукты категории:{{category.name}}</title>
+    <link rel="stylesheet" href="{{url_for('static',filebame='style.css')}}">
 </head>
 
 <body>
-
+    <header>
+        <h1>Продукты категории:{{category_name}}</h1>
+        <a href="{{url_for('index')}}">Назад к главной странице</a>
+    </header>
+    <h2>Случайные продукты</h2>
+    <ul>
+        {%for product in products%}
+        <li>
+            <h3>{{product_name}}</h3>
+            <p>{{product.description}}</p>
+            <p>Цена:{{product.price}}₽</p>
+        </li>
+        {%endfor%}
+    </ul>
+    {% if products|length == 0 %}
+    <p>Нет доступных продуктов в этой категории</p>
+    {%endfor%}
 </body>
 
 </html>
