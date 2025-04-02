@@ -6,8 +6,8 @@ from models.product import Product
 import random
 from models.category import Category
 from models.Order import Order
-
-
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 @admin_bp.route("/")
 def abmin_indrx():
     all_products = Product.query.all()
@@ -101,6 +101,31 @@ def show_categories():
     categoryes= Category.query.all()
     return render_template('categories.html',categoryes=categoryes)
 
+@admin_bp.route("/register",methods=['GET',"POST"])
+def register():
+    if request.method=="POST":
+        username=request.form.get("username")
+        password=request.form.get("password")
 
+        if username and password:
+            hashed_password=generate_password_hash(password)
+            new_user=User(username=username,password=hashed_password)
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect(url_for("Login"))
+        return render_template("register.html")
+    
+
+@admin_bp.route("/login",methods=["GET","POST"])
+def login():
+    if request.method=="POST":
+        username=request.form.get("username")
+        password=request.form.get("password")
+        user=User.query.filter_by(username=username).first
+
+        if user and check_password_hash(user.password,password):
+            login_user(user)
+            return redirect(url_for("index"))
+        return render_template("logon.html")
 
 
